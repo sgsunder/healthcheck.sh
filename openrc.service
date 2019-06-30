@@ -1,0 +1,9 @@
+#!/sbin/openrc-run
+
+command=/var/local/healthcheck/index.sh
+command_args=""
+pidfile="/run/healthcheck.pid"
+command_background=true
+
+name="Healthcheck API"
+description="Healthcheck API"
