@@ -41,18 +41,18 @@ do
 done
 
 # Create JSON File
-send $(jq -c . << EOJSON
+send $(tr -d '\n' << EOJSON
 {
-"uptime": "$(uptime | sed 's/.*up \([^,]*\), .*/\1/')",
-"os": "$(sed 's/^PRETTY_NAME=\"\(.*\)\"/\1/;t;d' /etc/os-release)",
-"load": [$(cut -d ' ' -f1-3 /proc/loadavg | tr -s ' ' ',')],
-"ram": $(free | awk 'NR==2{print int(100*$3/$2)}'),
-"zfs": {
-  "healthy": $(zpool status -x | grep -q 'all pools are healthy' && echo 'true' || echo 'false'),
-  "percent": $(zfs list -Hp | awk 'NR==1{print int(100*$2/($2+$3))}')
-}, "drives": {
-  "temp": [$(echo $drivetemps | tr -s ' ' ',')],
-  "healthy": $drivehealth
+"uptime":"$(uptime | sed 's/.*up \([^,]*\), .*/\1/')",
+"os":"$(sed 's/^PRETTY_NAME=\"\(.*\)\"/\1/;t;d' /etc/os-release)",
+"load":[$(cut -d ' ' -f1-3 /proc/loadavg | tr -s ' ' ',')],
+"ram":$(free | awk 'NR==2{print int(100*$3/$2)}'),
+"zfs":
+{"healthy":$(zpool status -x | grep -q 'all pools are healthy' && echo 'true' || echo 'false'),
+"percent":$(zfs list -Hp | awk 'NR==1{print int(100*$2/($2+$3))}')
+},"drives":
+{"temp":[$(echo $drivetemps | tr -s ' ' ',')],
+"healthy":$drivehealth
 }}
 EOJSON
 )

@@ -18,6 +18,4 @@ For drive status, it will call:
 - `hddtemp -A ${DRIVE}`: To get drive temperatures
 - `smartctl -H ${DRIVE}`: To get drive health
 
-To generate the JSON, `jq` is used
-
 To serve web requests, `socat` is used
