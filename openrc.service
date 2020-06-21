@@ -1,9 +1,17 @@
 #!/sbin/openrc-run
 
-command=/var/local/healthcheck/index.sh
-command_args=""
-pidfile="/run/healthcheck.pid"
+name="Healthcheck API"
+
+HEALTHCHECK_CMD="/usr/sbin/healthcheck-httpd"
+HEALTHCHECK_DIR="/run/healthcheck"
+UNIX_LISTEN_ARGS="${HEALTHCHECK_DIR}/healthcheck.sock,fork,unlink-early,unlink-close,umask=000"
+
+command="/usr/bin/socat"
+command_args="UNIX-LISTEN:${UNIX_LISTEN_ARGS} EXEC:${HEALTHCHECK_CMD}"
+
+pidfile="${HEALTHCHECK_DIR}/healthcheck.pid"
 command_background=true
 
-name="Healthcheck API"
-description="Healthcheck API"
+start_pre() {
+    mkdir -p "${HEALTHCHECK_DIR}"
+}
