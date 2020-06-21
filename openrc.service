@@ -2,7 +2,7 @@
 
 name="Healthcheck API"
 
-HEALTHCHECK_CMD="/usr/sbin/healthcheck-httpd"
+HEALTHCHECK_CMD="/usr/local/sbin/healthcheck-httpd"
 HEALTHCHECK_DIR="/run/healthcheck"
 UNIX_LISTEN_ARGS="${HEALTHCHECK_DIR}/healthcheck.sock,fork,unlink-early,unlink-close,umask=000"
 

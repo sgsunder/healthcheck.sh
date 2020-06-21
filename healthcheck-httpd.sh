@@ -27,10 +27,6 @@ cd "$(dirname "$0")"
 read -r request || bad_request
 echo $request | awk 'NR==1{print $1}' | grep -q 'GET' || bad_request
 
-# Send response headers
-send "HTTP/1.0 200 OK"
-send_default_headers
-
 # Get Drive Info
 drivetemps=""
 drivehealth="true"
@@ -41,7 +37,7 @@ do
 done
 
 # Create JSON File
-send $(tr -d '\n' << EOJSON
+jsonfile=$(tr -d '\n' << EOJSON
 {
 "uptime":"$(uptime | sed 's/.*up \([^,]*\), .*/\1/')",
 "os":"$(sed 's/^PRETTY_NAME=\"\(.*\)\"/\1/;t;d' /etc/os-release)",
@@ -56,5 +52,10 @@ send $(tr -d '\n' << EOJSON
 }}
 EOJSON
 )
+
+# Send response
+send "HTTP/1.0 200 OK"
+send_default_headers
+send $jsonfile
 
 exit 0
