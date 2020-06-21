@@ -34,7 +34,7 @@ send_default_headers
 # Get Drive Info
 drivetemps=""
 drivehealth="true"
-for drive in $(lsblk -nrd | awk '{print $1}')
+for drive in $(lsblk -nrdS | grep sata | awk '{print $1}')
 do
 	drivetemps="$(smartctl -A /dev/$drive | awk '/^194/{print int($10)}') $drivetemps"
 	smartctl -H /dev/$drive | grep -q 'SMART overall-health self-assessment test result: PASSED' || drivehealth="false"
